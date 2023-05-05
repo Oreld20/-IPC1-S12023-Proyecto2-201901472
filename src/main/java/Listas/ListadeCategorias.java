@@ -118,7 +118,7 @@ public class ListadeCategorias{
            NodoCategorias tmp2 = inicio.next;
             /* Se verifica que solo un elemento en la lista*/
             if(tmp2==null){
-                if(tmp1.getCategoria()==(nombreCategoria)){
+                if(tmp1.getCategoria().equals(nombreCategoria)){
                     inicio = null;
                     index--;
                     Mensaje("El elemento con valor "+nombreCategoria+" se ha eliminado");
@@ -128,7 +128,7 @@ public class ListadeCategorias{
             /* Si la lista tiene 2 o mas elementos */
             else{
                 /* Si el elemento a eliminar en la lista es el primero */
-                if(tmp1.getCategoria()==nombreCategoria){
+                if(tmp1.getCategoria().equals(nombreCategoria)){
                     inicio = tmp1.next;
                     index--;
                     Mensaje("El elemento con valor "+nombreCategoria+" se ha eliminado");
@@ -136,7 +136,7 @@ public class ListadeCategorias{
                 else{
                     for (int i = 0; i < this.index; i++) {
                         if(tmp2 != null){
-                            if(tmp2.getCategoria()==nombreCategoria){
+                            if(tmp2.getCategoria().equals(nombreCategoria)){
                                 tmp1.next = tmp2.next;
                                 index--;
                                 Mensaje("El elemento con valor "+nombreCategoria+" se ha eliminado");

@@ -4,6 +4,24 @@
  */
 package Interfaces;
 
+import CambioColor.AzulSepia;
+import CambioColor.BlancoNegro;
+import CambioColor.RojoSepia;
+import CambioColor.SepiaSepia;
+import CambioColor.VerdeSepia;
+import Handlers.BmpHandlerCopy;
+import Handlers.JPEGHandler;
+import Listas.ListadeUsuarios;
+import Listas.NodoImagen;
+import Listas.NodoUsuario;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author eliot
@@ -13,10 +31,24 @@ public class Convertidor extends javax.swing.JFrame {
     /**
      * Creates new form Convertidor
      */
-    public Convertidor() {
+    Menu padre;
+    public ListadeUsuarios listaUsuario = new ListadeUsuarios();
+    public Convertidor(ListadeUsuarios listaUsuario, Menu padre) {
+        this.listaUsuario=listaUsuario;
+        this.padre=padre;
+        
+        
         initComponents();
+        LlenarComboUs();
+        
     }
-
+    
+        private void LlenarComboUs(){
+        for (int i = 0; i < listaUsuario.getSize(); i++) {
+              cbx_Usuario.addItem(listaUsuario.getNodo(i).getNombreUsuario());
+        }
+    }
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,17 +61,20 @@ public class Convertidor extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cbx_Usuario = new javax.swing.JComboBox<>();
+        cbx_Categoria = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btn_BlancoNegro = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btn_Convertir = new javax.swing.JButton();
+        copiarJPEG = new javax.swing.JButton();
+        btn_Sepia = new javax.swing.JButton();
+        btn_Modificar = new javax.swing.JButton();
         btn_Volver = new javax.swing.JButton();
+        Consola = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        progreso = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,13 +93,23 @@ public class Convertidor extends javax.swing.JFrame {
         jLabel2.setText("Usuario:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 80, 20));
 
-        jComboBox1.setBackground(new java.awt.Color(153, 204, 255));
-        jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 100, -1));
+        cbx_Usuario.setBackground(new java.awt.Color(153, 204, 255));
+        cbx_Usuario.setForeground(new java.awt.Color(0, 0, 0));
+        cbx_Usuario.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbx_UsuarioItemStateChanged(evt);
+            }
+        });
+        cbx_Usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbx_UsuarioActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cbx_Usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 100, -1));
 
-        jComboBox2.setBackground(new java.awt.Color(153, 204, 255));
-        jComboBox2.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 20, 100, -1));
+        cbx_Categoria.setBackground(new java.awt.Color(153, 204, 255));
+        cbx_Categoria.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(cbx_Categoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 20, 100, -1));
 
         jButton1.setBackground(new java.awt.Color(153, 204, 255));
         jButton1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
@@ -78,35 +123,55 @@ public class Convertidor extends javax.swing.JFrame {
         jLabel3.setText("Categoria:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, 100, 20));
 
-        jButton2.setBackground(new java.awt.Color(153, 204, 255));
-        jButton2.setForeground(new java.awt.Color(0, 0, 0));
-        jButton2.setText("Blanco y Negro");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 290, 180, 40));
+        btn_BlancoNegro.setBackground(new java.awt.Color(153, 204, 255));
+        btn_BlancoNegro.setForeground(new java.awt.Color(0, 0, 0));
+        btn_BlancoNegro.setText("Blanco y Negro");
+        btn_BlancoNegro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_BlancoNegroActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_BlancoNegro, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 290, 180, 40));
 
         jButton3.setBackground(new java.awt.Color(153, 204, 255));
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
         jButton3.setText("Agregar");
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 30, 140, 40));
 
-        jButton4.setBackground(new java.awt.Color(153, 204, 255));
-        jButton4.setForeground(new java.awt.Color(0, 0, 0));
-        jButton4.setText("JPEG a BMP y viceversa");
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 180, 40));
+        btn_Convertir.setBackground(new java.awt.Color(153, 204, 255));
+        btn_Convertir.setForeground(new java.awt.Color(0, 0, 0));
+        btn_Convertir.setText("JPEG a BMP y viceversa");
+        btn_Convertir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ConvertirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_Convertir, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 180, 40));
 
-        jButton5.setBackground(new java.awt.Color(153, 204, 255));
-        jButton5.setForeground(new java.awt.Color(0, 0, 0));
-        jButton5.setText("Copiar JPEG");
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 140, 180, 40));
+        copiarJPEG.setBackground(new java.awt.Color(153, 204, 255));
+        copiarJPEG.setForeground(new java.awt.Color(0, 0, 0));
+        copiarJPEG.setText("Copiar JPEG");
+        copiarJPEG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copiarJPEGActionPerformed(evt);
+            }
+        });
+        jPanel1.add(copiarJPEG, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 140, 180, 40));
 
-        jButton6.setBackground(new java.awt.Color(153, 204, 255));
-        jButton6.setForeground(new java.awt.Color(0, 0, 0));
-        jButton6.setText("Rojo Verde Azul Sepia");
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 190, 180, 40));
+        btn_Sepia.setBackground(new java.awt.Color(153, 204, 255));
+        btn_Sepia.setForeground(new java.awt.Color(0, 0, 0));
+        btn_Sepia.setText("Rojo Verde Azul Sepia");
+        btn_Sepia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_SepiaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_Sepia, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 190, 180, 40));
 
-        jButton7.setBackground(new java.awt.Color(153, 204, 255));
-        jButton7.setForeground(new java.awt.Color(0, 0, 0));
-        jButton7.setText("Modificar Imagen");
-        jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 240, 180, 40));
+        btn_Modificar.setBackground(new java.awt.Color(153, 204, 255));
+        btn_Modificar.setForeground(new java.awt.Color(0, 0, 0));
+        btn_Modificar.setText("Modificar Imagen");
+        jPanel1.add(btn_Modificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 240, 180, 40));
 
         btn_Volver.setBackground(new java.awt.Color(153, 204, 255));
         btn_Volver.setForeground(new java.awt.Color(0, 0, 0));
@@ -117,6 +182,16 @@ public class Convertidor extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btn_Volver, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 520, 140, 40));
+
+        Consola.setBackground(new java.awt.Color(0, 0, 0));
+        Consola.setForeground(new java.awt.Color(255, 255, 255));
+        Consola.setOpaque(true);
+        jPanel1.add(Consola, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 410, 480, 150));
+
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Consola de ejecucion");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 120, 30));
+        jPanel1.add(progreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 480, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,14 +208,195 @@ public class Convertidor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_VolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_VolverActionPerformed
-
-        Menu menu = new Menu();
-        menu.setVisible(true);
-        menu.setLocationRelativeTo(null);
+        
+        padre.setVisible(true);
+        padre.setLocationRelativeTo(null);
         this.setVisible(false);
-
+        
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_VolverActionPerformed
+
+    private void cbx_UsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbx_UsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbx_UsuarioActionPerformed
+
+    private void cbx_UsuarioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbx_UsuarioItemStateChanged
+
+        System.out.println("Se cambio de usuario");
+            if (cbx_Usuario.getSelectedItem()!=null) {
+                cbx_Categoria.removeAllItems();
+            String primero = padre.listaUsuario.getUsuario(cbx_Usuario.getSelectedItem().toString()).getNombreUsuario();
+                if (primero != null) {
+                  for (int i = 0; i < listaUsuario.getUsuario(primero).listaCategoria.getSize(); i++) {
+                    cbx_Categoria.addItem(listaUsuario.getUsuario(primero).listaCategoria.getNodo(i).getCategoria());
+                }
+                }else{
+                    System.out.println("No existe el usuario");
+                }
+        }
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbx_UsuarioItemStateChanged
+
+    private void btn_ConvertirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ConvertirActionPerformed
+            progreso.setValue(0);
+            String usuario = cbx_Usuario.getSelectedItem().toString();
+            String categoria = cbx_Categoria.getSelectedItem().toString();
+            progreso.setMaximum(listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.getSize());
+            for (int i = 0; i <= listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.getSize(); i++) {
+                if (listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.get(i)!=null) {
+                   Consola.setText("");
+                   NodoImagen primero = listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.get(i);
+                   String extencion =primero.getName();
+                   int j = extencion.lastIndexOf('.');
+                   String fe = "";
+                    if (j > 0) {
+                    fe = extencion.substring(j+1);
+                    }
+                if ("bmp".equals(fe)) {
+                    try {
+                    File file = new File(primero.getPath_());
+                    BufferedImage bufferedImage = ImageIO.read(file);
+                    ImageIO.write(bufferedImage, "jpg", new File("C:\\Users\\eliot\\OneDrive\\Documentos\\NetBeansProjects\\Ugallery\\src\\main\\java\\Conversion\\Converted_"+primero.getName()+".jpg"));
+                    JOptionPane.showMessageDialog(null, "Se creo una conversion en la ruta correspondiente de " + primero.getName());
+                    Consola.setText("se convirtio a jpg: " + extencion);
+                    progreso.setValue(i);
+                    } catch (IOException e) {
+                    e.printStackTrace();
+                  }   
+        }
+            if ("jpg".equals(fe)) {
+                try {
+                File file = new File(primero.getPath_());
+                BufferedImage bufferedImage = ImageIO.read(file);
+                ImageIO.write(bufferedImage, "bmp", new File("C:\\Users\\eliot\\OneDrive\\Documentos\\NetBeansProjects\\Ugallery\\src\\main\\java\\Conversion\\Converted_"+primero.getName()+".bmp"));
+                JOptionPane.showMessageDialog(null, "Se creo una conversion en la ruta correspondiente de " + primero.getName());
+                Consola.setText("se convirtio a bmp: " + extencion);
+                progreso.setValue(i);
+                } catch (IOException e) {
+                e.printStackTrace();
+                }  
+            }  
+            
+                }
+               
+        }
+            JOptionPane.showMessageDialog(null, "Se crearon las imagenes con el formato indicado en la ruta correspondiente");
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_ConvertirActionPerformed
+
+    private void btn_BlancoNegroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_BlancoNegroActionPerformed
+        progreso.setValue(0);
+        String usuario = cbx_Usuario.getSelectedItem().toString();
+        String categoria = cbx_Categoria.getSelectedItem().toString();
+        progreso.setMaximum(listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.getSize());
+        for (int i = 0; i <= listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.getSize(); i++) {
+            if (listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.get(i)!=null) {
+                Consola.setText("");
+                NodoImagen primero = listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.get(i);
+                String ruta = primero.getPath_();
+                BlancoNegro bn = new BlancoNegro(ruta);
+                try {
+                  JPEGHandler.runHandler(bn);
+                  JOptionPane.showMessageDialog(null, "Se creo una conversion en la ruta correspondiente de " + primero.getName());
+                  Consola.setText("Convirtio a blanco y negro: " + primero.getName());
+                  progreso.setValue(i);
+                } catch (Exception e) {
+                }
+               
+            } 
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_BlancoNegroActionPerformed
+
+    private void copiarJPEGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copiarJPEGActionPerformed
+        progreso.setValue(0);
+        String usuario = cbx_Usuario.getSelectedItem().toString();
+        String categoria = cbx_Categoria.getSelectedItem().toString();
+        progreso.setMaximum(listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.getSize());
+        for (int i = 0; i <= listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.getSize(); i++) {
+            if (listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.get(i)!=null) {
+                Consola.setText("");
+                NodoImagen primero = listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.get(i);
+                Consola.setText("hacieno una copia a : " + primero.getName());
+                System.out.println("Ingreso");
+         File file = new File(primero.getPath_());
+                BufferedImage bufferedImage;
+        try {
+            bufferedImage = ImageIO.read(file);
+            ImageIO.write(bufferedImage, "bmp", new File("C:\\Users\\eliot\\OneDrive\\Documentos\\NetBeansProjects\\Ugallery\\src\\main\\java\\Copias\\Converted_"+primero.getName()+".bmp"));
+            System.out.println("Se convierte a bmp");
+        } catch (IOException ex) {
+            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+        }       
+        BmpHandlerCopy cp = new BmpHandlerCopy("C:\\Users\\eliot\\OneDrive\\Documentos\\NetBeansProjects\\Ugallery\\src\\main\\java\\Copias\\Converted_"+primero.getName()+".bmp");
+   
+        try {
+            cp.readFile();
+            cp.generateFiles();
+            System.out.println("Se crea una copia de bmp");
+        } catch (Exception ex) {
+            System.out.println("No se pudo generar la copia");
+            System.out.println(ex.toString());
+        }
+         try {
+                File file2 = new File("C:\\Users\\eliot\\OneDrive\\Documentos\\NetBeansProjects\\Ugallery\\src\\main\\java\\Copias\\copy-Converted_"+primero.getName()+".bmp");
+                BufferedImage bufferedImage2 = ImageIO.read(file2);
+                ImageIO.write(bufferedImage2, "jpg", new File("C:\\Users\\eliot\\OneDrive\\Documentos\\NetBeansProjects\\Ugallery\\src\\main\\java\\Copias\\Converted_"+primero.getName()+".jpg"));
+                JOptionPane.showMessageDialog(null, "Se crearon las imagenes con el formato indicado en la ruta correspondiente de "+primero.getName());
+                progreso.setValue(i);
+                Consola.setText("Se creo una copia de: " + primero.getName());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                  }
+                
+            } 
+        }
+
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_copiarJPEGActionPerformed
+
+    private void btn_SepiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SepiaActionPerformed
+        progreso.setValue(0);
+        String usuario = cbx_Usuario.getSelectedItem().toString();
+        String categoria = cbx_Categoria.getSelectedItem().toString();
+        progreso.setMaximum(listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.getSize());
+        for (int i = 0; i <= listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.getSize(); i++) {
+            if (listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.get(i)!=null) {
+                Consola.setText("");
+                NodoImagen primero = listaUsuario.getUsuario(usuario).listaCategoria.getNodo(categoria).listaImagenes.get(i);
+                String ruta = primero.getPath_();
+                Consola.setText("Convirtiendo a blanco y negro: " + primero.getName());
+                System.out.println("Ingreso ");
+        RojoSepia bn = new RojoSepia(ruta);
+        AzulSepia an = new AzulSepia(ruta);
+        VerdeSepia vn = new VerdeSepia(ruta);
+        SepiaSepia rn = new SepiaSepia(ruta);
+        try {
+            
+            bn.readFile();
+            bn.generateFiles();
+            an.readFile();
+            an.generateFiles();
+            vn.readFile();
+            vn.generateFiles();
+            rn.readFile();
+            rn.generateFiles();
+            JOptionPane.showMessageDialog(null, "Se creo una imagen con el formato indicado en la ruta correspondiente de "+primero.getName());
+             progreso.setValue(i);
+             Consola.setText("Se creo una copia de: " + primero.getName()); 
+        } catch (Exception e) {
+        }
+                progreso.setValue(i);
+            } 
+        }
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_SepiaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -148,19 +404,22 @@ public class Convertidor extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Consola;
+    private javax.swing.JButton btn_BlancoNegro;
+    private javax.swing.JButton btn_Convertir;
+    private javax.swing.JButton btn_Modificar;
+    private javax.swing.JButton btn_Sepia;
     private javax.swing.JButton btn_Volver;
+    private javax.swing.JComboBox<String> cbx_Categoria;
+    private javax.swing.JComboBox<String> cbx_Usuario;
+    private javax.swing.JButton copiarJPEG;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JProgressBar progreso;
     // End of variables declaration//GEN-END:variables
 }

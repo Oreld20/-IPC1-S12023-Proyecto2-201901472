@@ -7,7 +7,7 @@ package Interfaces;
 import Listas.ListadeCategorias;
 import Listas.ListadeUsuarios;
 import Listas.NodoUsuario;
-import Listas.ImagenP;
+import Listas.NodoImagen;
 import Listas.ListaImagen;
 import java.awt.Image;
 import java.io.File;
@@ -36,6 +36,7 @@ public class Biblioteca extends javax.swing.JFrame {
     public Biblioteca(Menu padre, String nombre) {
         this.padre=padre;
         this.usuario=padre.listaUsuario.getUsuario(nombre);
+        
         initComponents();
         LlenarCombo();
        jlb_Nombre.setText(usuario.getNombreUsuario()); 
@@ -60,7 +61,7 @@ public class Biblioteca extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btn_Eliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btn_eliminarCategoria = new javax.swing.JButton();
         btn_agregarCategoria = new javax.swing.JButton();
         btn_Anterior = new javax.swing.JButton();
         btn_Siguiente = new javax.swing.JButton();
@@ -95,10 +96,15 @@ public class Biblioteca extends javax.swing.JFrame {
         });
         jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 20, 130, 40));
 
-        jButton3.setBackground(new java.awt.Color(153, 204, 255));
-        jButton3.setForeground(new java.awt.Color(0, 0, 0));
-        jButton3.setText("Eliminar Categoria");
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 450, -1, -1));
+        btn_eliminarCategoria.setBackground(new java.awt.Color(153, 204, 255));
+        btn_eliminarCategoria.setForeground(new java.awt.Color(0, 0, 0));
+        btn_eliminarCategoria.setText("Eliminar Categoria");
+        btn_eliminarCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminarCategoriaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_eliminarCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 450, -1, -1));
 
         btn_agregarCategoria.setBackground(new java.awt.Color(153, 204, 255));
         btn_agregarCategoria.setForeground(new java.awt.Color(0, 0, 0));
@@ -183,6 +189,7 @@ public class Biblioteca extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btn_VolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_VolverActionPerformed
+        
         padre.setVisible(true);
         padre.setLocationRelativeTo(null);
         this.setVisible(false);
@@ -191,9 +198,9 @@ public class Biblioteca extends javax.swing.JFrame {
 
     private void btn_AnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AnteriorActionPerformed
         
-        ImagenP actual = (ImagenP)this.padre.listaUsuario.getUsuario(usuario.getNombreUsuario()).listaCategoria.getNodo(cbx_Categorias.getSelectedItem().toString()).listaImagenes.find(archivo.getName());
+        NodoImagen actual = (NodoImagen)this.padre.listaUsuario.getUsuario(usuario.getNombreUsuario()).listaCategoria.getNodo(cbx_Categorias.getSelectedItem().toString()).listaImagenes.find(archivo.getName());
         if (actual!=null) {
-            ImagenP anterior = actual.getBack();
+            NodoImagen anterior = actual.getBack();
             if (anterior!=null) {
                 System.out.println(anterior.getPath_());
                 mostrarImagen(img1, anterior.getPath_());
@@ -222,9 +229,9 @@ public class Biblioteca extends javax.swing.JFrame {
     private void btn_SiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SiguienteActionPerformed
         
         
-        ImagenP actual = (ImagenP)this.padre.listaUsuario.getUsuario(usuario.getNombreUsuario()).listaCategoria.getNodo(cbx_Categorias.getSelectedItem().toString()).listaImagenes.find(archivo.getName());
+        NodoImagen actual = (NodoImagen)this.padre.listaUsuario.getUsuario(usuario.getNombreUsuario()).listaCategoria.getNodo(cbx_Categorias.getSelectedItem().toString()).listaImagenes.find(archivo.getName());
         if (actual!=null) {
-            ImagenP siguiente = actual.getNext();
+            NodoImagen siguiente = actual.getNext();
             if (siguiente!=null) {
                 System.out.println(siguiente.getPath_());
                 mostrarImagen(img1, siguiente.getPath_());
@@ -240,7 +247,7 @@ public class Biblioteca extends javax.swing.JFrame {
     private void cbx_CategoriasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbx_CategoriasItemStateChanged
         System.out.println("Se cambio la categoria");
             if (cbx_Categorias.getSelectedItem()!=null) {
-            ImagenP primero = this.padre.listaUsuario.getUsuario(usuario.getNombreUsuario()).listaCategoria.getNodo(cbx_Categorias.getSelectedItem().toString()).listaImagenes.get(1);
+            NodoImagen primero = this.padre.listaUsuario.getUsuario(usuario.getNombreUsuario()).listaCategoria.getNodo(cbx_Categorias.getSelectedItem().toString()).listaImagenes.get(1);
                 if (primero != null) {
                     foto = primero.getPath_();
                     archivo = new File(foto);
@@ -253,9 +260,6 @@ public class Biblioteca extends javax.swing.JFrame {
                 foto= "";
                 }
         }
-
-
-
         // TODO add your handling code here:
     }//GEN-LAST:event_cbx_CategoriasItemStateChanged
 
@@ -265,15 +269,38 @@ public class Biblioteca extends javax.swing.JFrame {
 
     private void btn_EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EliminarActionPerformed
 
-        
-
-
+        System.out.println("Se ingreso a eliminar");
+         this.padre.listaUsuario.getUsuario(usuario.getNombreUsuario()).listaCategoria.getNodo(cbx_Categorias.getSelectedItem().toString()).listaImagenes.delete(archivo.getName());
+        NodoImagen primero = this.padre.listaUsuario.getUsuario(usuario.getNombreUsuario()).listaCategoria.getNodo(cbx_Categorias.getSelectedItem().toString()).listaImagenes.get(1);
+        if (primero != null) {
+                    foto = primero.getPath_();
+                    archivo = new File(foto);
+                    mostrarImagen(img1, primero.getPath_());
+                    
+                    
+                }else{
+                img1.setIcon(null);
+                archivo = null;
+                foto= "";
+                }
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_EliminarActionPerformed
+
+    private void btn_eliminarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminarCategoriaActionPerformed
+
+            System.out.println("Se esta eliminando una categoria");
+            if (cbx_Categorias.getSelectedItem()!=null) {
+             this.padre.listaUsuario.getUsuario(usuario.getNombreUsuario()).listaCategoria.delete(cbx_Categorias.getSelectedItem().toString());
+             cbx_Categorias.removeItem(cbx_Categorias.getSelectedItem());
+        }
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_eliminarCategoriaActionPerformed
     
      private void agregarImageALista(){
-        ImagenP actual = buscarImagen();
+        NodoImagen actual = buscarImagen();
         foto = actual.getPath_();
         if(!foto.equals(""))
         {
@@ -291,7 +318,7 @@ public class Biblioteca extends javax.swing.JFrame {
         }
     }
      
-     private ImagenP buscarImagen(){
+     private NodoImagen buscarImagen(){
         JFileChooser fc = new JFileChooser();
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("jpg, jpeg, png", "jpg", "jpeg", "png");
         fc.setFileFilter(filtro);
@@ -300,7 +327,7 @@ public class Biblioteca extends javax.swing.JFrame {
             String nombre = fc.getSelectedFile().getName();
             String ubicacion = fc.getSelectedFile().getPath();
             archivo=fc.getSelectedFile();
-            return new ImagenP(nombre, ubicacion);
+            return new NodoImagen(nombre, ubicacion);
         }
         return null;
     }
@@ -323,9 +350,9 @@ public class Biblioteca extends javax.swing.JFrame {
     private javax.swing.JButton btn_Siguiente;
     private javax.swing.JButton btn_Volver;
     private javax.swing.JButton btn_agregarCategoria;
+    private javax.swing.JButton btn_eliminarCategoria;
     private javax.swing.JComboBox<String> cbx_Categorias;
     private javax.swing.JLabel img1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel jlb_Nombre;
     private javax.swing.JTextField txt_Categoria;

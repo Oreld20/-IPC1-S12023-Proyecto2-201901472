@@ -46,7 +46,7 @@ public abstract class CambiarColor extends ImageHandler{
                 repintar(i, j, color);
             }
         }
-        ImageIO.write(bmp, "jpg", new File("C:\\Users\\eliot\\OneDrive\\Documentos\\NetBeansProjects\\Ugallery\\src\\main\\java\\Ccolor\\BlancoNegro"+".jpg"));
+        ImageIO.write(bmp, "jpg", new File("C:\\Users\\eliot\\OneDrive\\Documentos\\NetBeansProjects\\Ugallery\\src\\main\\java\\Ccolor\\BlancoNegro-"+tmp.getName()+".jpg"));
         //tmp.delete();
     }
     

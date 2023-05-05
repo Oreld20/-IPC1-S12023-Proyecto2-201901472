@@ -19,7 +19,8 @@ public class Menu extends javax.swing.JFrame {
     /**
      * Creates new form Menu
      */
-    public Menu() {
+    public Menu(ListadeUsuarios listaUsuario) {
+        
         initComponents();
         
     }
@@ -138,7 +139,7 @@ public class Menu extends javax.swing.JFrame {
               }
                  listaUsuario.mostrar();
                 
-                 Biblioteca biblioteca = new Biblioteca(this,nombre);
+                 Biblioteca biblioteca = new Biblioteca(this, nombre);
                  biblioteca.setVisible(true);
                  biblioteca.setLocationRelativeTo(null);
                  this.setVisible(false);
@@ -166,7 +167,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void btn_ConvertidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ConvertidorActionPerformed
 
-        Convertidor convertidor = new Convertidor();
+        Convertidor convertidor = new Convertidor(listaUsuario, this);
         convertidor.setVisible(true);
         convertidor.setLocationRelativeTo(null);
         this.setVisible(false);

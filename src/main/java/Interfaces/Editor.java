@@ -3,10 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Interfaces;
+import CambioColor.AzulSepia;
 import CambioColor.BlancoNegro;
+import CambioColor.RojoSepia;
+import CambioColor.SepiaSepia;
+import CambioColor.VerdeSepia;
 import Handlers.BmpHandlerCopy;
 import Handlers.JPEGHandler;
+import Handlers.JPEGHandler1;
+import Handlers.JPEGHandler2;
+import Handlers.JPEGHandler3;
 import Listas.ListaImagen;
+import Listas.ListadeUsuarios;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -27,6 +36,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class Editor extends javax.swing.JFrame {
     String foto;
     ListaImagen li;
+     public ListadeUsuarios listaUsuario = new ListadeUsuarios();
     /**
      * Creates new form Editor
      */
@@ -52,6 +62,7 @@ public class Editor extends javax.swing.JFrame {
         IDireccion = new javax.swing.JLabel();
         btn_Volver = new javax.swing.JButton();
         lbl_Imagen = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,7 +77,7 @@ public class Editor extends javax.swing.JFrame {
                 btn_BlancoynegroActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_Blancoynegro, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 220, 40));
+        jPanel1.add(btn_Blancoynegro, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 220, 40));
 
         btn_Buscar.setBackground(new java.awt.Color(153, 204, 255));
         btn_Buscar.setForeground(new java.awt.Color(0, 0, 0));
@@ -86,7 +97,7 @@ public class Editor extends javax.swing.JFrame {
                 btn_ConvertirActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_Convertir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 220, 40));
+        jPanel1.add(btn_Convertir, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 220, 40));
 
         jButton4.setBackground(new java.awt.Color(153, 204, 255));
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
@@ -96,12 +107,17 @@ public class Editor extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 220, 40));
+        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 220, 40));
 
         jButton5.setBackground(new java.awt.Color(153, 204, 255));
         jButton5.setForeground(new java.awt.Color(0, 0, 0));
         jButton5.setText("Rojo Verde Azul Sepia");
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 220, 40));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 220, 40));
 
         IDireccion.setBackground(new java.awt.Color(255, 255, 255));
         IDireccion.setForeground(new java.awt.Color(0, 0, 0));
@@ -116,7 +132,17 @@ public class Editor extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btn_Volver, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 150, 40));
-        jPanel1.add(lbl_Imagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 90, 390, 250));
+        jPanel1.add(lbl_Imagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 80, 390, 250));
+
+        jButton6.setBackground(new java.awt.Color(153, 204, 255));
+        jButton6.setForeground(new java.awt.Color(0, 0, 0));
+        jButton6.setText("Modificar Imagen");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 220, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,7 +160,7 @@ public class Editor extends javax.swing.JFrame {
 
     private void btn_VolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_VolverActionPerformed
 
-        Menu menu = new Menu();
+        Menu menu = new Menu(listaUsuario);
         menu.setVisible(true);
         menu.setLocationRelativeTo(null);
         this.setVisible(false);
@@ -185,7 +211,6 @@ public class Editor extends javax.swing.JFrame {
 		if (i > 0) {
 		  fe = extencion.substring(i+1);
 		}
-		
             if ("bmp".equals(fe)) {
                 try {
                 File file = new File(archivo.getAbsolutePath());
@@ -209,7 +234,6 @@ public class Editor extends javax.swing.JFrame {
                 e.printStackTrace();
                 }  
         }
- 
     }//GEN-LAST:event_btn_ConvertirActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -229,7 +253,7 @@ public class Editor extends javax.swing.JFrame {
         try {
             cp.readFile();
             cp.generateFiles();
-                 System.out.println("Se crea una copia de bmp");
+            System.out.println("Se crea una copia de bmp");
         } catch (Exception ex) {
             System.out.println("No se pudo generar la copia");
             System.out.println(ex.toString());
@@ -247,6 +271,36 @@ public class Editor extends javax.swing.JFrame {
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+
+         System.out.println("Ingreso ");
+        RojoSepia bn = new RojoSepia(archivo.getAbsolutePath());
+        AzulSepia an = new AzulSepia(archivo.getAbsolutePath());
+        VerdeSepia vn = new VerdeSepia(archivo.getAbsolutePath());
+        SepiaSepia rn = new SepiaSepia(archivo.getAbsolutePath());
+        try {
+            bn.readFile();
+            bn.generateFiles();
+            an.readFile();
+            an.generateFiles();
+            vn.readFile();
+            vn.generateFiles();
+            rn.readFile();
+            rn.generateFiles();
+            JOptionPane.showMessageDialog(null, "Se crearon las imagenes en la ruta correspondiente"); 
+        } catch (Exception e) {
+        }
+                
+         
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     private void mostrarImagen(JLabel cuadro, String ruta){
     
@@ -272,6 +326,7 @@ public class Editor extends javax.swing.JFrame {
     private javax.swing.JButton btn_Volver;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbl_Imagen;
     // End of variables declaration//GEN-END:variables

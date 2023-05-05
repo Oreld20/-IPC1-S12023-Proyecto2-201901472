@@ -13,9 +13,9 @@ import javax.swing.JOptionPane;
  * **************************************************** */
 public class ListaImagen extends EstructuraDeDatos{
     /* Variable que se usara para el inicio de la lista */
-    private ImagenP start;
+    private NodoImagen start;
     private final String msj1;
-    private ImagenP recorrido;
+    private NodoImagen recorrido;
     
     
     public ListaImagen(){
@@ -33,7 +33,7 @@ public class ListaImagen extends EstructuraDeDatos{
     @Override
     public void add(Object e) {
         /* Se convierte el parametro e de tipo objeto a ImagenP */
-        ImagenP newImage = (ImagenP)e;
+        NodoImagen newImage = (NodoImagen)e;
         /* ****************************************************************** * 
           * Se verifica si ya existe la imagen en la lista                    *
           * Si ya existe la imagen la funcion find retornara algo diferente   *
@@ -77,7 +77,7 @@ public class ListaImagen extends EstructuraDeDatos{
         else Mensaje("Ya existe una imagen con el nombre "+ newImage.getName());
     }
 
-    private void addFirstImage(ImagenP newImage){
+    private void addFirstImage(NodoImagen newImage){
         /* ****************************************************************** *
          * Al ser el primer elemento de la lista y al ser una lista circular  *
          * se deben los apuntadores en esta caso hacia el mismo               *
@@ -105,11 +105,11 @@ public class ListaImagen extends EstructuraDeDatos{
      * ********************************************************************** *
      * ********************************************************************** */
     @Override
-    public ImagenP find(Object e) {
+    public NodoImagen find(Object e) {
         /* Seconvierte el objeto recibido a un String */
         String name = (String)e;
         /* Se crea un Nodo temporal que se usara para recorrer la lista */
-        ImagenP actual = start;
+        NodoImagen actual = start;
         /* Se recorre la lista usando un for usando como limite la cantidad de elementos en ella */
         for (int i = 0; i < index; i++) {
             /* ************************************************************** *
@@ -157,11 +157,11 @@ public class ListaImagen extends EstructuraDeDatos{
      * ********************************************************************** *
      * ********************************************************************** */
     @Override
-    public ImagenP get(int index) {
+    public NodoImagen get(int index) {
          /* Seconvierte el objeto recibido a un String */
         
         /* Se crea un Nodo temporal que se usara para recorrer la lista */
-        ImagenP actual = start;
+        NodoImagen actual = start;
         /* Se recorre la lista usando un for usando como limite la cantidad de elementos en ella */
         for (int i = 0; i < index; i++) {
             /* ************************************************************** *
@@ -202,7 +202,7 @@ public class ListaImagen extends EstructuraDeDatos{
          * ****************************************************************** */
         if(imagenAEliminar!=null){
             /* Se convierte el objeto a tipo ImagenP */
-            ImagenP actual = (ImagenP)imagenAEliminar;
+            NodoImagen actual = (NodoImagen)imagenAEliminar;
             /* ************************************************************** *
              * Si solo existe una imagen en la lista y se elimina solo se     *
              * reinicia la variable start con null                            *
@@ -250,7 +250,7 @@ public class ListaImagen extends EstructuraDeDatos{
          * ****************************************************************** */
         if(imagenAEliminar!=null){
             /* Se convierte el objeto a tipo ImagenP */
-            ImagenP actual = (ImagenP)imagenAEliminar;
+            NodoImagen actual = (NodoImagen)imagenAEliminar;
             actual.setPath_(path);
             Mensaje(msj1+name+" actualizo la ubicacion");
         }
@@ -270,7 +270,7 @@ public class ListaImagen extends EstructuraDeDatos{
     
     
     public void mostrar(){
-        ImagenP tmp = start;
+        NodoImagen tmp = start;
         for (int i = 0; i < index; i++) {
             
             System.out.println("Nombre "+tmp.getName());

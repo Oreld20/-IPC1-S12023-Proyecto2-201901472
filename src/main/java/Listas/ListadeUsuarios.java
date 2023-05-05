@@ -78,6 +78,26 @@ public class ListadeUsuarios{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
+    
+    
+    public NodoUsuario getNodo(int posicion){
+     if(this.index==0) {
+         return null;
+     }else{
+            NodoUsuario tmp = inicio;
+
+            for (int i = 0; i < this.index; i++) {
+                if (tmp!=null) {
+                    if (i==posicion) {
+                        return tmp; 
+                    }
+                     tmp = tmp.next;
+                }
+            }
+      }
+       return null;
+    }
+    
     public boolean existeUsuario(String nombre){
         if(this.index==0) {
          return false;
