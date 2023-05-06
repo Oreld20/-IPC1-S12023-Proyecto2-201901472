@@ -10,9 +10,7 @@ import CambioColor.SepiaSepia;
 import CambioColor.VerdeSepia;
 import Handlers.BmpHandlerCopy;
 import Handlers.JPEGHandler;
-import Handlers.JPEGHandler1;
-import Handlers.JPEGHandler2;
-import Handlers.JPEGHandler3;
+
 import Listas.ListaImagen;
 import Listas.ListadeUsuarios;
 import java.awt.Color;
